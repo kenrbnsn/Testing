@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: parse.php
+Disallow: new_index.php
+Disallow: just_table.html
+Disallow: /d7_home/
+

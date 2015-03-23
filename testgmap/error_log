@@ -1,0 +1,9 @@
+[20-Dec-2013 22:49:11] PHP Warning:  include(../dbconfig.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rbnsn/public_html/weavers/testgmap/index.php on line 2
+[20-Dec-2013 22:49:11] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '../dbconfig.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rbnsn/public_html/weavers/testgmap/index.php on line 2
+[20-Dec-2013 22:49:11] PHP Warning:  mysqli::mysqli() [<a href='mysqli.mysqli'>mysqli.mysqli</a>]: (28000/1045): Access denied for user 'rbnsn'@'localhost' (using password: NO) in /home/rbnsn/public_html/weavers/testgmap/index.php on line 3
+[20-Dec-2013 22:49:12] PHP Warning:  include(../dbconfig.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rbnsn/public_html/weavers/testgmap/index.php on line 2
+[20-Dec-2013 22:49:12] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '../dbconfig.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rbnsn/public_html/weavers/testgmap/index.php on line 2
+[20-Dec-2013 22:49:12] PHP Warning:  mysqli::mysqli() [<a href='mysqli.mysqli'>mysqli.mysqli</a>]: (28000/1045): Access denied for user 'rbnsn'@'localhost' (using password: NO) in /home/rbnsn/public_html/weavers/testgmap/index.php on line 3
+[20-Dec-2013 22:49:12] PHP Warning:  mysqli::prepare() [<a href='mysqli.prepare'>mysqli.prepare</a>]: Couldn't fetch mysqli in /home/rbnsn/public_html/weavers/testgmap/index.php on line 6
+[20-Dec-2013 22:49:12] PHP Fatal error:  Call to a member function bind_param() on a non-object in /home/rbnsn/public_html/weavers/testgmap/index.php on line 7
+[20-Dec-2013 22:49:41] PHP Fatal error:  Call to a member function bind_param() on a non-object in /home/rbnsn/public_html/weavers/testgmap/index.php on line 7

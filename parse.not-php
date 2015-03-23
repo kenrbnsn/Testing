@@ -1,0 +1,76 @@
+<?php
+date_default_timezone_set('America/New_York');
+include('../nsdc/simple_html_dom.php');
+$html = @file_get_html('http://rbnsn.com/weavers/just_table.html');
+$indx = array('name','location','email','x','comments','web');
+$parts = array();
+$old_parts = array();
+$i = 0;
+foreach($html->find('tr') as $row) {
+	$parts[$i] = array('name'=>'','location'=>'','email'=>array(),'comments'=>'','web'=>array());
+	$n = 0;
+	foreach ($row->find('td') as $td) {
+		if ($n == 2) {
+			$parts[$i][$indx[$n]] = explode('<br>',$td->innertext);
+		} else {
+			if ($indx[$n] != 'x') {
+				if ($indx[$n] != 'web') {
+					$parts[$i][$indx[$n]] = $td->innertext;
+				} else {
+					if ($td->innertext != '') {
+						preg_match_all('/<a [^>]*href="(.+)"/',$td->innertext, $matches);
+	//					$parts[$i][$indx[$n]]['orig'] = $td->innertext;
+						$parts[$i][$indx[$n]]['url'] = $matches[1][0];
+						$parts[$i][$indx[$n]]['title'] = strip_tags($td->innertext);
+					} else {
+						$pargs[$i][$indx[$n]] = array();
+					}
+				}
+			}
+		}
+		$n++;
+	}
+	++$i;
+}
+//echo '<pre>' . print_r($parts,true) . '</pre>';
+include ('../dbconfig.php');
+$db = new mysqli("localhost", $dbuser, $dbpass, "rbnsn_weavers1");
+if($db->connect_errno > 0){
+    trigger_error("Unable to connect to database [{$db->connect_error}]", E_USER_ERROR);
+}
+$sql = 'INSERT INTO weavers_info (username, Location, email, comment, web_url, web_title) values (?,?,?,?,?,?)';
+
+foreach ($parts as $i => $row) {
+	$username = (trim($row['name']) != 'NA')?trim($row['name']):'';
+	$location = (trim($row['location']) != 'NA')?trim($row['location']):'';
+	if ($location == '<br>') {
+		$location = '';
+	}
+	$email = (!empty($row['email']))?implode(',',array_map('trim',$row['email'])):'';
+	$comment = (trim($row['comments']) != '<br>')?trim($row['comments']):'';
+	if ($row['web']['url'] != '') {
+		$web_url = trim($row['web']['url']);
+		$myURL = 'http://www.google.com';
+		if (preg_match('/<title>(.+)<\/title>/i',@file_get_contents($web_url),$matches) && isset($matches[1])) {
+		   $web_title = $matches[1];
+		} else {
+		   $web_title = trim($row['web']['title']);
+		   $web_url .= ' **(bad)**';
+		}
+	} else {
+		$web_url = '';
+		$web_title = '';
+	}
+	$stmt = $db->prepare($sql);
+	if($stmt === false) {
+	  trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $db->error, E_USER_ERROR);
+	}
+	$stmt->bind_param('ssssss',$username,$location,$email,$comment,$web_url,$web_title);
+//	echo '<pre>' . print_r($row,true) . '</pre>';
+	if (!$stmt->execute()) {
+		trigger_error("Execute failed: ({$stmt->errno}) {$stmt->error}",E_USER_ERROR);
+	}
+	echo "{$stmt->insert_id} - {$stmt->affected_rows}<br>\n";
+	$stmt->close();
+}
+?>

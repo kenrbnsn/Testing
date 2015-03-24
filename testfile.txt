@@ -36,3 +36,17 @@ Just testing
 7
 8
 
+$body = '';
+$fh   = @fopen('php://input', 'r');
+if ($fh)
+{
+  while (!feof($fh))
+  {
+    $s = fread($fh, 1024);
+    if (is_string($s))
+    {
+      $body .= $s;
+    }
+  }
+  fclose($fh);
+}
